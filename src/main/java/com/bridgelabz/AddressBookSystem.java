@@ -6,6 +6,12 @@
  * *******************************************************************************************/
 package com.bridgelabz;
 
+import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
+import com.opencsv.bean.ColumnPositionMappingStrategy;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -209,6 +215,7 @@ public class AddressBookSystem {
             e.printStackTrace();
         }
     }
+
     /**
      * UC11 Sort by First name in Alphabetical order
      */
@@ -281,6 +288,57 @@ public class AddressBookSystem {
         }
     }
 
+    /**
+     * UC 14
+     * Ability to Read the Address Book with Persons Contact
+     * as CSV File
+     */
+    public void readCsv() {
+        try (CSVReader reader = new CSVReader(new FileReader("contacts.csv"));)
+        {
+            String[] nextLine;
+            while((nextLine = reader.readNext()) != null) {
+                if(nextLine != null) {
+                    System.out.println(Arrays.toString(nextLine));
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Read complete");
+    }
+
+    /**
+     * UC 14
+     * Ability to write the Address Book with Persons Contact
+     * as CSV File
+     */
+
+    public void writeCsv(){
+        try{
+            FileWriter fileWriter = new FileWriter("contacts.csv");
+            ColumnPositionMappingStrategy mappingStrategy =
+                    new ColumnPositionMappingStrategy();
+            mappingStrategy.setType(Person.class);
+
+            String[] columns = new String[]{"FirstName","LastName","Address",
+                    "City","state","pinCode","phoneNumber","emailId"};
+            mappingStrategy.setColumnMapping(columns);
+
+            StatefulBeanToCsvBuilder<Person> builder =
+                    new StatefulBeanToCsvBuilder(fileWriter);
+
+            StatefulBeanToCsv beanWriter =
+                    builder.withMappingStrategy(mappingStrategy).build();
+
+            beanWriter.write(personList);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         try {
             System.out.println("Welcome to Address Book Program");
@@ -289,7 +347,7 @@ public class AddressBookSystem {
             while (!isExit) {
                 System.out.println("Enter your choice \n1.Add New Contact\n2.Edit Contact\n3.Delete Contact" +
                         "\n4.Show Person Contact\n5.Search Person\n6.Search By City\n7 Count Person By city" +
-                        "\n8.Sort By Person Name\n9. Sort By City\n10. Write to file\n11.Read From File\n12.Exit");
+                        "\n8.Sort By Person Name\n9. Sort By City\n10. Write to file\n11.Read From File\n12.Read From Csv\n13.Write To Csv\n14.Exit");
                 int choice = sc.nextInt();
                 switch (choice) {
                     case 1:
@@ -325,7 +383,13 @@ public class AddressBookSystem {
                     case 11:
                         contact.readFromFile();
                         break;
-                    case 12:
+                    case 12 :
+                        contact.readCsv();
+                        break;
+                    case 13:
+                        contact.writeCsv();
+                        break;
+                    case 14:
                         isExit = true;
                         break;
                     default:
