@@ -7,10 +7,12 @@
 package com.bridgelabz;
 
 import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
 import java.util.*;
@@ -339,6 +341,28 @@ public class AddressBookSystem {
         }
     }
 
+    /**
+     * Writes contacts to a json file.
+     */
+    public void convertToJson() {
+        String result="";
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            result = mapper.writeValueAsString(personList);
+            for(Person person : personList) {
+                mapper.writeValue(new File("contact1.json"), person);
+            }
+
+        } catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(result);
+    }
+
     public static void main(String[] args) {
         try {
             System.out.println("Welcome to Address Book Program");
@@ -347,7 +371,8 @@ public class AddressBookSystem {
             while (!isExit) {
                 System.out.println("Enter your choice \n1.Add New Contact\n2.Edit Contact\n3.Delete Contact" +
                         "\n4.Show Person Contact\n5.Search Person\n6.Search By City\n7 Count Person By city" +
-                        "\n8.Sort By Person Name\n9. Sort By City\n10. Write to file\n11.Read From File\n12.Read From Csv\n13.Write To Csv\n14.Exit");
+                        "\n8.Sort By Person Name\n9. Sort By City\n10. Write to file\n11.Read From File\n" +
+                        "12.Read From Csv\n13.Write To Csv\n15.Convert To Json\n16.Exit");
                 int choice = sc.nextInt();
                 switch (choice) {
                     case 1:
@@ -390,6 +415,9 @@ public class AddressBookSystem {
                         contact.writeCsv();
                         break;
                     case 14:
+                        contact.convertToJson();
+                        break;
+                    case 15:
                         isExit = true;
                         break;
                     default:
