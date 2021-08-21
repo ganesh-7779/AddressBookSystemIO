@@ -15,10 +15,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -404,6 +401,51 @@ public class AddressBookSystem {
             System.out.println(driverClass.getClass().getName());
         }
     }
+    public void addContactToDatabase() {
+        connectToDatabase();
+        System.out.println("Last name : ");
+        String lastName = sc.next();
+        System.out.println("First Name :");
+        String firstName = sc.next();
+        System.out.println("type : ");
+        String type = sc.next();
+        System.out.println("Address :");
+        String address = sc.next();
+        System.out.println("City :");
+        String city = sc.next();
+        System.out.println("Phone :");
+        long phone = sc.nextLong();
+        System.out.println("LandLine :");
+        int landLine = sc.nextInt();
+        System.out.println("Email :");
+        String email = sc.next();
+        System.out.println("Zip :");
+        int zip = sc.nextInt();
+        System.out.println("PersonId :");
+        int personId = sc.nextInt();
+
+        String query = "insert into persons (LastName,FirstName,Type,Address,City,PhoneNumber,Landline,email,zip,PersonID) \r\n"
+                + "values (?,?,?,?,?,?,?,?,?,?);";
+        try {
+            PreparedStatement preparedstatement = connection.prepareStatement(query);
+            preparedstatement.setString(1, lastName);
+            preparedstatement.setString(2, firstName);
+            preparedstatement.setString(3, type);
+            preparedstatement.setString(4, address);
+            preparedstatement.setString(5, city);
+            preparedstatement.setLong(6, phone);
+            preparedstatement.setInt(7, landLine);
+            preparedstatement.setString(8, email);
+            preparedstatement.setInt(9, zip);
+            preparedstatement.setInt(10, personId);
+
+
+            preparedstatement.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
         try {
             System.out.println("Welcome to Address Book Program");
@@ -413,7 +455,7 @@ public class AddressBookSystem {
                 System.out.println("Enter your choice \n1.Add New Contact\n2.Edit Contact\n3.Delete Contact" +
                         "\n4.Show Person Contact\n5.Search Person\n6.Search By City\n7 Count Person By city" +
                         "\n8.Sort By Person Name\n9. Sort By City\n10. Write to file\n11.Read From File\n" +
-                        "12.Read From Csv\n13.Write To Csv\n14.Convert To Json\n15.Connect to JDBC\n16.Exit");
+                        "12.Read From Csv\n13.Write To Csv\n14.Convert To Json\n15.Connect to JDBC\n16. Add to database \n17.Exit");
                 int choice = sc.nextInt();
                 switch (choice) {
                     case 1:
@@ -462,6 +504,9 @@ public class AddressBookSystem {
                         contact.connectToDatabase();
                         break;
                     case 16:
+                        contact.addContactToDatabase();
+                        break;
+                    case 17:
                         isExit = true;
                         break;
                     default:
