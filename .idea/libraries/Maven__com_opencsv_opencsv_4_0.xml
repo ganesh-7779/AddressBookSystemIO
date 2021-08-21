@@ -8,6 +8,16 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/com/opencsv/opencsv/4.0/opencsv-4.0-sources.jar!/" />
+      <root url="file://$USER_HOME$/Desktop/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26/src/build/java" />
+      <root url="file://$USER_HOME$/Desktop/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26/src/demo/java" />
+      <root url="file://$USER_HOME$/Desktop/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26/src/generated/java" />
+      <root url="file://$USER_HOME$/Desktop/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26/src/legacy/java" />
+      <root url="file://$USER_HOME$/Desktop/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26/src/main/core-api/java" />
+      <root url="file://$USER_HOME$/Desktop/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26/src/main/core-impl/java" />
+      <root url="file://$USER_HOME$/Desktop/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26/src/main/protocol-impl/java" />
+      <root url="file://$USER_HOME$/Desktop/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26/src/main/user-api/java" />
+      <root url="file://$USER_HOME$/Desktop/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26/src/main/user-impl/java" />
+      <root url="file://$USER_HOME$/Desktop/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26/src/test/java" />
     </SOURCES>
   </library>
 </component>

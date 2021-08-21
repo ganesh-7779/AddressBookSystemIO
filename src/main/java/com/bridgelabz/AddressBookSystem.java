@@ -15,6 +15,10 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,6 +27,7 @@ public class AddressBookSystem {
     private ArrayList<Person> personList = null;
     private Map<String,ArrayList<Person>> contactBook = new HashMap<>();
     public String city;
+   private Connection connection;
 
     /*
      * UC1 Taking User Input for person detail
@@ -362,7 +367,43 @@ public class AddressBookSystem {
         }
         System.out.println(result);
     }
+    /**
+     * Ability to connect to database
+     * @return true if connected successfully otherwise false
+     */
+    public boolean connectToDatabase() {
+        String jdbcURL = "jdbc:mysql://localhost:3307/address_book_system?useSSL=false";
+        String userName = "root";
+        String password = "Ganesh@7779";
 
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("Driver Loaded.");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Cannot find the driver in the classpath!", e);
+        }
+        listDrivers();
+        // Establishing connection With Database.
+        try {
+            System.out.println("Connecting to database: " + jdbcURL);
+            connection = DriverManager.getConnection(jdbcURL, userName, password);
+            System.out.println("Connection is successful! " + connection);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    /**
+     * Purpose : this method is for Check all the drivers registered with the jdbc driver
+     */
+    private static void listDrivers() {
+        Enumeration<Driver> driverList = DriverManager.getDrivers();
+        while (driverList.hasMoreElements()) {
+            Driver driverClass = driverList.nextElement();
+            System.out.println(driverClass.getClass().getName());
+        }
+    }
     public static void main(String[] args) {
         try {
             System.out.println("Welcome to Address Book Program");
@@ -372,7 +413,7 @@ public class AddressBookSystem {
                 System.out.println("Enter your choice \n1.Add New Contact\n2.Edit Contact\n3.Delete Contact" +
                         "\n4.Show Person Contact\n5.Search Person\n6.Search By City\n7 Count Person By city" +
                         "\n8.Sort By Person Name\n9. Sort By City\n10. Write to file\n11.Read From File\n" +
-                        "12.Read From Csv\n13.Write To Csv\n14.Convert To Json\n15.Exit");
+                        "12.Read From Csv\n13.Write To Csv\n14.Convert To Json\n15.Connect to JDBC\n16.Exit");
                 int choice = sc.nextInt();
                 switch (choice) {
                     case 1:
@@ -418,6 +459,9 @@ public class AddressBookSystem {
                         contact.convertToJson();
                         break;
                     case 15:
+                        contact.connectToDatabase();
+                        break;
+                    case 16:
                         isExit = true;
                         break;
                     default:
